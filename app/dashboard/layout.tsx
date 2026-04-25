@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthor } from "@/context/AuthorContext";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useAppDispatch } from "@/store";
 import { SEED_AUTHORS } from "@/lib/data";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
+import { fetchComments } from "@/store/commentSlice";
+import { fetchPosts } from "@/store/postSlice";
+import { useCommentModeration } from "@/hooks/useCommentModeration";
 
 const NAV_LINKS = [
     { href: "/dashboard", label: "Overview", icon: "📊" },
@@ -17,21 +19,22 @@ const NAV_LINKS = [
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+    const dispatch = useAppDispatch();
     const pathname = usePathname();
     const router = useRouter();
     const { currentAuthor, setCurrentAuthor } = useAuthor();
-    const pendingCount = useSelector((state: RootState) => state.comments.pendingCount);
-    const [mounted, setMounted] = useState(false);
+    const { pendingCount } = useCommentModeration(currentAuthor?.id);
 
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        dispatch(fetchPosts());
+        dispatch(fetchComments());
+    }, [dispatch]);
 
     useEffect(() => {
-        if (mounted && currentAuthor === null) {
+        if (currentAuthor === null) {
             router.push("/?error=login_required");
         }
-    }, [currentAuthor, mounted, router]);
+    }, [currentAuthor, router]);
 
     function handleAuthorChange(e: React.ChangeEvent<HTMLSelectElement>) {
         const id = e.target.value;
@@ -86,7 +89,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 {/* Dashboard header */}
                 <header className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-white shrink-0" suppressHydrationWarning>
                     {/* Current author */}
-                    {mounted && currentAuthor ? (
+                    {currentAuthor ? (
                         <div className="flex items-center gap-2">
                             <Image
                                 src={currentAuthor.avatarUrl ?? "https://i.pravatar.cc/32"}
