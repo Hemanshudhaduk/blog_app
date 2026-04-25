@@ -16,15 +16,16 @@ async function getPublishedPosts(): Promise<Post[]> {
 
 // ── Page props ────────────────────────────────────────────
 interface HomePageProps {
-  searchParams: { category?: string };
+  searchParams: Promise<{ category?: string }>;
 }
 
 // ── Server Component ──────────────────────────────────────
 export default async function HomePage({ searchParams }: HomePageProps) {
   const allPosts = await getPublishedPosts();
+  const { category } = await searchParams;
 
   // Apply category filter server-side from ?category= param
-  const activeCategory = searchParams.category as PostCategory | undefined;
+  const activeCategory = category as PostCategory | undefined;
   const filtered = activeCategory
     ? allPosts.filter((p) => p.category === activeCategory)
     : allPosts;
@@ -36,8 +37,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
 
-      {/* ── Category filter bar ──────────────────────────── */}
-      {/* <CategoryFilterBar active={activeCategory} /> */}
+      
 
       {/* ── Hero section ────────────────────────────────── */}
       {heroPast ? (

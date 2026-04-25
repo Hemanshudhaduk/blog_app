@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { Post, Comment } from "@/types/blog";
@@ -62,13 +63,15 @@ export default async function PostPage({ params }: PostPageProps) {
 
             {/* ── Cover image ──────────────────────────────────── */}
             {post.coverImageUrl ? (
-                <img
+                <Image
                     src={post.coverImageUrl}
                     alt={post.title}
+                    width={1200}
+                    height={450}
                     className="w-full h-72 object-cover rounded-2xl"
                 />
             ) : (
-                <div className="w-full h-72 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600
+                <div className="w-full h-72 rounded-2xl bg-linear-to-br from-blue-400 to-indigo-600
           flex items-center justify-center">
                     <span className="text-white text-8xl font-black opacity-20">
                         {post.title.charAt(0)}
@@ -95,7 +98,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
                 {/* Author + date */}
                 <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600
+                    <div className="w-9 h-9 rounded-full bg-linear-to-br from-blue-500 to-indigo-600
             flex items-center justify-center text-white text-sm font-bold shrink-0">
                         A
                     </div>

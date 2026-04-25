@@ -7,7 +7,7 @@ import { useAuthor } from "@/context/AuthorContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { SEED_AUTHORS } from "@/lib/data";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const NAV_LINKS = [
     { href: "/dashboard", label: "Overview", icon: "📊" },
@@ -21,12 +21,17 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
     const { currentAuthor, setCurrentAuthor } = useAuthor();
     const pendingCount = useSelector((state: RootState) => state.comments.pendingCount);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        if (currentAuthor === null) {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (mounted && currentAuthor === null) {
             router.push("/?error=login_required");
         }
-    }, [currentAuthor, router]);
+    }, [currentAuthor, mounted, router]);
 
     function handleAuthorChange(e: React.ChangeEvent<HTMLSelectElement>) {
         const id = e.target.value;
@@ -81,7 +86,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 {/* Dashboard header */}
                 <header className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-white shrink-0" suppressHydrationWarning>
                     {/* Current author */}
-                    {currentAuthor ? (
+                    {mounted && currentAuthor ? (
                         <div className="flex items-center gap-2">
                             <Image
                                 src={currentAuthor.avatarUrl ?? "https://i.pravatar.cc/32"}

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchComments } from "@/store/commentSlice";
+import { fetchPosts } from "@/store/postSlice";
 import { useCommentModeration } from "@/hooks/useCommentModeration";
 import { CommentCard } from "@/components/Commentcard";
 import { useAuthor } from "@/context/AuthorContext";
@@ -24,6 +25,7 @@ export default function DashboardCommentsPage() {
     } = useCommentModeration(currentAuthor?.id);
 
     useEffect(() => {
+        dispatch(fetchPosts());
         dispatch(fetchComments());
     }, [dispatch]);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchPosts, deletePost, editPost } from "@/store/postSlice";
@@ -16,6 +16,7 @@ export default function DashboardPostsPage() {
     const router = useRouter();
     const { currentAuthor } = useAuthor();
     const { posts, filters, status } = useAppSelector((s) => s.posts);
+    const isLoading = status === "idle" || status === "loading";
 
     useEffect(() => {
         dispatch(fetchPosts());
@@ -92,7 +93,7 @@ export default function DashboardPostsPage() {
             <Postfiltersbar showStatusFilter className="mb-6" />
 
             {/* Loading */}
-            {status === "loading" && (
+            {isLoading && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div
@@ -111,15 +112,15 @@ export default function DashboardPostsPage() {
             )}
 
             {/* Posts grid */}
-            {status !== "loading" && (
+            {!isLoading && (
                 <>
                     {filtered.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center">
                             <svg className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <p className="text-gray-500 dark:text-gray-400 font-medium">No posts match your filters</p>
-                            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Try adjusting your search or filters</p>
+                            <p className="text-gray-500 dark:text-gray-400 font-medium">No posts found</p>
+                            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Either there are no posts yet or update your filters/search.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
