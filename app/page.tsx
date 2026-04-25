@@ -10,7 +10,7 @@ import { CategoryBadge } from "@/components/Categorybadge";
 ---------------------------- */
 const getBaseUrl = () => {
   if (process.env.VERCEL_URL) {
-    return null
+    return "https://blog-app-two-tan.vercel.app/";
   }
   return "http://localhost:3000";
 };
@@ -21,7 +21,7 @@ const getBaseUrl = () => {
 async function getPublishedPosts(): Promise<Post[]> {
   try {
     const res = await fetch(
-      `/api/posts?status=published`,
+      `${getBaseUrl()}/api/posts?status=published`,
       {
         cache: "no-store",
       }
