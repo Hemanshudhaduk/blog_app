@@ -9,7 +9,7 @@ import { Commentform } from "@/components/Commentform";
 // ── Data fetching ─────────────────────────────────────────
 const getBaseUrl = () => {
   if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
+    return "https://blog-app-two-tan.vercel.app";
   }
   return "http://localhost:3000";
 };
