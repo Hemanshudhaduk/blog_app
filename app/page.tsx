@@ -1,21 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { posts as seedPosts } from "@/lib/data";
 import { Post, PostCategory } from "@/types/blog";
 import { PostCard } from "@/components/Postcard";
 import { CategoryBadge } from "@/components/Categorybadge";
-
-// ── Data fetching ─────────────────────────────────────────
-async function getPublishedPosts(): Promise<Post[]> {
-  const baseUrl = process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
-  const res = await fetch(
-    `${baseUrl}/api/posts?status=published`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) return [];
-  return res.json();
-}
 
 // ── Page props ────────────────────────────────────────────
 interface HomePageProps {
@@ -24,7 +12,7 @@ interface HomePageProps {
 
 // ── Server Component ──────────────────────────────────────
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const allPosts = await getPublishedPosts();
+  const allPosts = seedPosts.filter((post) => post.status === "published");
   const { category } = await searchParams;
 
   // Apply category filter server-side from ?category= param
