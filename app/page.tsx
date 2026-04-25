@@ -7,7 +7,7 @@ import { CategoryBadge } from "@/components/Categorybadge";
 // ── Data fetching ─────────────────────────────────────────
 async function getPublishedPosts(): Promise<Post[]> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/posts?status=published`,
+    `/api/posts?status=published`,
     { cache: "no-store" }
   );
   if (!res.ok) return [];
