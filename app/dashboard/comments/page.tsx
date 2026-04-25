@@ -40,7 +40,9 @@ export default function DashboardCommentsPage() {
                         Comments
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Moderate reader comments across all posts
+                        {currentAuthor
+                            ? `Moderate reader comments on ${currentAuthor.name}'s posts`
+                            : "Moderate reader comments across your posts"}
                     </p>
                 </div>
 
