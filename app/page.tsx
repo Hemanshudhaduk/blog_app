@@ -10,7 +10,7 @@ import { CategoryBadge } from "@/components/Categorybadge";
 ---------------------------- */
 const getBaseUrl = () => {
   if (process.env.VERCEL_URL) {
-    return "https://blog-app-two-tan.vercel.app/";
+    return "https://blog-app-two-tan.vercel.app";
   }
   return "http://localhost:3000";
 };
