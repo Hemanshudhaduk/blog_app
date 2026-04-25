@@ -6,8 +6,11 @@ import { CategoryBadge } from "@/components/Categorybadge";
 
 // ── Data fetching ─────────────────────────────────────────
 async function getPublishedPosts(): Promise<Post[]> {
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
   const res = await fetch(
-    `/api/posts?status=published`,
+    `${baseUrl}/api/posts?status=published`,
     { cache: "no-store" }
   );
   if (!res.ok) return [];

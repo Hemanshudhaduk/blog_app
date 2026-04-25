@@ -7,8 +7,15 @@ import { CommentCard } from "@/components/Commentcard";
 import { Commentform } from "@/components/Commentform";
     
 // ── Data fetching ─────────────────────────────────────────
+const getBaseUrl = () => {
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return "http://localhost:3000";
+};
+
 async function getPostBySlug(slug: string): Promise<Post | null> {
-    const res = await fetch(`/api/posts?slug=${slug}`, { cache: "no-store" });
+    const res = await fetch(`${getBaseUrl()}/api/posts?slug=${slug}`, { cache: "no-store" });
     if (!res.ok) return null;
     const posts: Post[] = await res.json();
     return posts[0] ?? null;
@@ -16,7 +23,7 @@ async function getPostBySlug(slug: string): Promise<Post | null> {
 
 async function getApprovedComments(postId: string): Promise<Comment[]> {
     const res = await fetch(
-        `/api/comments?postId=${postId}&approved=true`,
+        `${getBaseUrl()}/api/comments?postId=${postId}&approved=true`,
         { cache: "no-store" }
     );
     if (!res.ok) return [];
@@ -24,7 +31,7 @@ async function getApprovedComments(postId: string): Promise<Comment[]> {
 }
 
 async function trackView(postId: string): Promise<void> {
-    await fetch(`/api/posts/${postId}?track=true`, {
+    await fetch(`${getBaseUrl()}/api/posts/${postId}?track=true`, {
         method: "GET",
         cache: "no-store",
     });
